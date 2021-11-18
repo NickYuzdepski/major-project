@@ -1,6 +1,6 @@
 // Project Title
-// Your Name
-// Date
+// Nicklas Yuzdepski
+// November 18, 2021
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
