@@ -10,9 +10,11 @@ A rock paper scissors combat game with multiple characters each with their own d
 - mouse input from user
 - rock, paper scissors logic 
 - each character has 3 abilities
+- sound effects and music
 
 ## Nice to Have List
 
+-
 - game is a best of 3 
 - more than 2 playable characters
 - computer can interpret player moves instead of choosing abilities at random 
