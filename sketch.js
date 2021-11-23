@@ -1,10 +1,12 @@
-// Project Title
+// Duel!
 // Nicklas Yuzdepski
 // November 18, 2021
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
 
+let backgroundImage;
+
+function preload() {
+  backgroundImage = load()
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -12,4 +14,8 @@ function setup() {
 
 function draw() {
   background(220);
+}
+
+function mousePressed() {
+
 }
