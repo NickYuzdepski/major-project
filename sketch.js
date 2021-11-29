@@ -6,7 +6,7 @@ let button;
 let backgroundImage;
 
 function preload() {
-  backgroundImage = load()
+  backgroundImage = load();
 }
 
 function setup() {
@@ -16,12 +16,6 @@ function setup() {
 
 function draw() {
   background(220);
-}
-
-function mousePressed() {
-  if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-    toggleState()
-  }
 }
 
 class Button {
@@ -34,19 +28,23 @@ class Button {
     this.text = text;
   }
 
-display() {
-  fill(this.color);
-  rect(this.x, this.y, this.height, this.width);
+  display() {
+    if (dist(mouseX, mouseY, this.width/2 - this.x, this.height * 0.7) <= this.size * 2.25) {
+      this.Color = fill(220);
+  }
+    else {
+      fill(180);
+    }
+    
+    
+    text("start", this.x, this.y);
+    fill(this.color);
+    rect(this.x, this.y, this.height, this.width);
+
+  mousePressed() {
+    if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
+      play();
+    }
+  }
 }
 
-toggleState() {
-  let state = 1;
-}
-
-
-
-
-
-
-
-}
