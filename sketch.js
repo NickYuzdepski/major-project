@@ -3,10 +3,13 @@
 // November 18, 2021
 
 let button;
-let backgroundImage;
+let backgroundGrid = [
+
+
+
+];
 
 function preload() {
-  backgroundImage = load();
 }
 
 function setup() {
@@ -24,23 +27,30 @@ class Button {
     this.y = y;
     this.height = height;
     this.width = width;
+    this.size = size;
     this.color = color;
     this.text = text;
   }
 
   display() {
-    if (dist(mouseX, mouseY, this.width/2 - this.x, this.height * 0.7) <= this.size * 2.25) {
-      this.Color = fill(220);
-  }
-    else {
-      fill(180);
-    }
-    
-    
-    text("start", this.x, this.y);
     fill(this.color);
     rect(this.x, this.y, this.height, this.width);
+    textSize(this.size);
+    textAlign(CENTER, CENTER);
+    text("start", this.x, this.y);
+    
+  }
 
+  mouseHover() {
+  if (dist(mouseX, mouseY, this.width/2 - this.x, this.height) <= this.size) {
+    this.Color = fill(211);
+  }
+  
+  else {
+    fill(0);
+    }
+  }
+    
   mousePressed() {
     if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
       play();
