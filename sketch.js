@@ -30,40 +30,44 @@ class Button {
     this.text = text;
   }
 
+  //if mouse is hovering over button
   display() {
     if (dist(mouseX, mouseY, this.width/2 - this.x, this.height) <= this.size) {
-       fill(220);
+
+      fill(220);
   }
     else {
       fill(180);
     }
     
+    //display button
     fill(this.color);
     textSize(this.size);
     textAlign(CENTER, CENTER);
     text("start", this.x, this.y);
+    rectMode(CENTER);
     rect(this.x, this.y, this.height, this.width);
-
-    mousePressed() ;{
-      if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-        play();
-      }
     }
-  }
+    
+    //if mouse is pressed on button, play function is called
+  mousePressed() {
+    if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
+      play();
+    }
+  } 
 }
-
-play() ;{
-
-}
-
 
 startScreen() ;{
-  button.display()
-  button.mousePressed()
+  fill("white")
+  textSize(40);
+  textAlign(CENTER, CENTER);
+  text("Duel!")
+  button.display();
+  button.mousePressed();
 }
 
 characterSelectionScreen() ;{
-  button.mousePressed()
+  button.mousePressed();
 }
 
 
