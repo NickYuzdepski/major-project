@@ -7,7 +7,6 @@ let backgroundImage;
 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
-
 }
 
 function setup() {
@@ -35,7 +34,7 @@ class Button {
     if (dist(mouseX, mouseY, this.width/2 - this.x, this.height) <= this.size) {
 
       fill(220);
-  }
+    }
     else {
       fill(180);
     }
@@ -49,15 +48,14 @@ class Button {
     rect(this.x, this.y, this.height, this.width);
     }
     
-    //if mouse is pressed on button, play function is called
+  //if mouse is pressed on button
   mousePressed() {
     if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-      play();
     }
   } 
 }
 
-startScreen() ;{
+function startScreen() {
   fill("white")
   textSize(40);
   textAlign(CENTER, CENTER);
@@ -66,7 +64,8 @@ startScreen() ;{
   button.mousePressed();
 }
 
-characterSelectionScreen() ;{
+function characterSelectionScreen() ;{
+  fill("black");
   button.mousePressed();
 }
 
