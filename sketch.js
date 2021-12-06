@@ -3,10 +3,11 @@
 // November 18, 2021
 
 let button;
-let backgroundImage;
+let backgroundImage; 
 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
+  warriorImage = loadImage("")
 }
 
 function setup() {
@@ -51,6 +52,7 @@ class Button {
   //if mouse is pressed on button
   mousePressed() {
     if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
+      stateChanged();
     }
   } 
 }
@@ -66,8 +68,16 @@ function startScreen() {
 
 function characterSelectionScreen() ;{
   fill("black");
-  button.mousePressed();
+  rectMode(CENTER);
+  for (i = 0; i < 4; i++) {
+    rectMode(CENTER);
+    rect(windowHeight/2, i + 100, 50, 50);
+  }
+ if  (button.mousePressed()) {
+   play();
+ }
 }
+
 
 
 
