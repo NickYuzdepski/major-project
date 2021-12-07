@@ -7,7 +7,6 @@ let backgroundImage;
 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
-  warriorImage = loadImage("")
 }
 
 function setup() {
@@ -78,6 +77,27 @@ function characterSelectionScreen() ;{
  }
 }
 
+//rock paper scissors logic
+
+//if (rock && paper) {
+  //winner === paper;
+
+  
+//if (rock && scissors) {
+  //winner === rock;
+//}
+//if (paper && scissors) {
+  // winner === scissors;
+
+//}
+
+//if (winner) {
+  //counter ++;
+//}
+
+//if (counter === 3);
+  //roundWinner();
+//}
 
 
 
