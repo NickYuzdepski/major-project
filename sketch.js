@@ -46,7 +46,7 @@ class Button {
     text("start", this.x, this.y);
     rectMode(CENTER);
     rect(this.x, this.y, this.height, this.width);
-    }
+  }
     
   //if mouse is pressed on button
   mousePressed() {
@@ -57,24 +57,24 @@ class Button {
 }
 
 function startScreen() {
-  fill("white")
+  fill("white");
   textSize(40);
   textAlign(CENTER, CENTER);
-  text("Duel!")
+  text("Duel!");
   button.display();
   button.mousePressed();
 }
 
-function characterSelectionScreen() ;{
+function characterSelectionScreen() {
   fill("black");
   rectMode(CENTER);
-  for (i = 0; i < 4; i++) {
+  for (let i = 0; i < 4; i++) {
     rectMode(CENTER);
     rect(windowHeight/2, i + 100, 50, 50);
   }
- if  (button.mousePressed()) {
-   play();
- }
+  if  (button.mousePressed()) {
+    play();
+  }
 }
 
 //rock paper scissors logic
@@ -97,6 +97,12 @@ function characterSelectionScreen() ;{
 
 //if (counter === 3);
   //roundWinner();
+//}
+
+
+//changeScreen()
+  //if (mouseIsPressed) {
+
 //}
 
 
