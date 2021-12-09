@@ -48,12 +48,22 @@ class Button {
     rect(this.x, this.y, this.height, this.width);
   }
     
-  //if mouse is pressed on button
+  //if mouse pressed on button
   mousePressed() {
     if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-      stateChanged();
+      changeScreen();
     }
   } 
+}
+
+class Knight {
+  constructor(x, y, height, width, text) {
+    this.x = x;
+    this.y = y;
+    this.height = height;
+    this.width = width;
+    this.text = text;
+  }
 }
 
 function startScreen() {
@@ -70,7 +80,7 @@ function characterSelectionScreen() {
   rectMode(CENTER);
   for (let i = 0; i < 4; i++) {
     rectMode(CENTER);
-    rect(windowHeight/2, i + 100, 50, 50);
+    button.display();
   }
   if  (button.mousePressed()) {
     play();
