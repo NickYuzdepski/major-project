@@ -43,7 +43,7 @@ class Button {
     fill(this.color);
     textSize(this.size);
     textAlign(CENTER, CENTER);
-    text("start", this.x, this.y);
+    text(this.text, this.x, this.y);
     rectMode(CENTER);
     rect(this.x, this.y, this.height, this.width);
   }
@@ -66,6 +66,16 @@ class Knight {
   }
 }
 
+class Samurai {
+  constructor(x, y, height, width, text) {
+    this.x = x;
+    this.y = y;
+    this.height = height;
+    this.width = width;
+    this.text = text;
+  }
+}
+
 function startScreen() {
   fill("white");
   textSize(40);
@@ -77,7 +87,6 @@ function startScreen() {
 
 function characterSelectionScreen() {
   fill("black");
-  rectMode(CENTER);
   for (let i = 0; i < 4; i++) {
     rectMode(CENTER);
     button.display();
@@ -114,6 +123,12 @@ function characterSelectionScreen() {
   //if (mouseIsPressed) {
 
 //}
+
+
+//ability descriptions
+//text(attack: deal damage to enemy if enemy in attack mode or enemy in parry mode)
+//text(parry: next attack will deal 2x damage, while in this mode, vulnerable to attack)
+//text(defend: block if enemy in attack mode)
 
 
 
