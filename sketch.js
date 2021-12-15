@@ -16,6 +16,10 @@ function setup() {
 
 function draw() {
   startScreen();
+  if (button.mousePressed()) {
+    button.hasBeenPressed = true;
+    characterSelectionScreen();
+  }
   background(backgroundImage);
 }
 
@@ -27,6 +31,7 @@ class Button {
     this.width = width;
     this.color = color;
     this.text = text;
+    this.hasBeenPressed = false;
   }
 
   //if mouse is hovering over button
@@ -78,6 +83,7 @@ class Samurai {
 
 function startScreen() {
   fill("white");
+  textFont('Brush Script');
   textSize(40);
   textAlign(CENTER, CENTER);
   text("Duel!");
@@ -92,9 +98,33 @@ function characterSelectionScreen() {
     button.display();
   }
   if  (button.mousePressed()) {
+    changeScreen();
     play();
   }
 }
+
+
+play() {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //rock paper scissors logic
 
