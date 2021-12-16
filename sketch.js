@@ -20,7 +20,9 @@ function draw() {
     button.hasBeenPressed = true;
     characterSelectionScreen();
   }
+  else {
   background(backgroundImage);
+  }
 }
 
 class Button {
@@ -56,7 +58,7 @@ class Button {
   //if mouse pressed on button
   mousePressed() {
     if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-      changeScreen();
+      this.hasBeenPressed
     }
   } 
 }
@@ -103,29 +105,6 @@ function characterSelectionScreen() {
   }
 }
 
-
-play() {
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //rock paper scissors logic
 
 //if (rock && paper) {
@@ -156,9 +135,9 @@ play() {
 
 
 //ability descriptions
-//text(attack: deal damage to enemy if enemy in attack mode or enemy in parry mode)
-//text(parry: next attack will deal 2x damage, while in this mode, vulnerable to attack)
-//text(defend: block if enemy in attack mode)
+//text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode")
+//text("parry: next attack will deal 2x damage, while in this mode, vulnerable to attack")
+//text("defend: block if enemy in attack mode")
 
 
 
