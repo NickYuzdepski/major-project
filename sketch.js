@@ -3,26 +3,27 @@
 // November 18, 2021
 
 let button;
-let backgroundImage; 
-
+let knight;
+let samurai;
+let backgroundImage;
+let knightImage;
+let samuraiImage;
+ 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
+  knightImage = loadImage("assets/Knight.png");
+  samuraiImage = loadImage("assets/Samurai.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   button = new Button();
+  knight = new Knight();
+  samurai = new Samurai();
 }
 
 function draw() {
   startScreen();
-  if (button.mousePressed()) {
-    button.hasBeenPressed = true;
-    characterSelectionScreen();
-  }
-  else {
-  background(backgroundImage);
-  }
 }
 
 class Button {
@@ -58,7 +59,7 @@ class Button {
   //if mouse pressed on button
   mousePressed() {
     if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-      this.hasBeenPressed
+      this.hasBeenPressed;
     }
   } 
 }
@@ -69,7 +70,9 @@ class Knight {
     this.y = y;
     this.height = height;
     this.width = width;
-    this.text = text;
+    this.text = abilityText;
+    this.image = knightImage;
+
   }
 }
 
@@ -80,12 +83,13 @@ class Samurai {
     this.height = height;
     this.width = width;
     this.text = text;
+    this.image = samuraiImage;
   }
 }
 
 function startScreen() {
   fill("white");
-  textFont('Brush Script');
+  textFont("Brush Script");
   textSize(40);
   textAlign(CENTER, CENTER);
   text("Duel!");
@@ -93,67 +97,34 @@ function startScreen() {
   button.mousePressed();
 }
 
-function characterSelectionScreen() {
-  fill("black");
-  for (let i = 0; i < 4; i++) {
-    rectMode(CENTER);
-    button.display();
+
+let abilityText = { attackText: text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"),
+  defendText: text("defend: block if enemy in attack mode"),
+  parryText: text("defend: block if enemy in attack mode"),
+}
+
+
+
+display() {;
+  if (button.hasBeenPressed = true && button.mousePressed()) {
+    abilityText[attackText];
   }
-  if  (button.mousePressed()) {
-    changeScreen();
-    play();
+
+  if (button.hasBeenPressed = true && button.mousePressed()) {
+    abilityText[defendText];
+  }
+
+  if (button.hasBeenPressed = true && button.mousePressed()) {
+    abilityText[parryText];
   }
 }
 
-//rock paper scissors logic
-
-//if (rock && paper) {
-  //winner === paper;
-
-  
-//if (rock && scissors) {
-  //winner === rock;
-//}
-//if (paper && scissors) {
-  // winner === scissors;
-
-//}
-
-//if (winner) {
-  //counter ++;
-//}
-
-//if (counter === 3);
-  //roundWinner();
-//}
-
-
-//changeScreen()
-  //if (mouseIsPressed) {
-
-//}
 
 
 //ability descriptions
 //text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode")
 //text("parry: next attack will deal 2x damage, while in this mode, vulnerable to attack")
 //text("defend: block if enemy in attack mode")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
