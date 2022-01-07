@@ -24,42 +24,43 @@ function setup() {
 
 function draw() {
   startScreen();
+  if (button.hasBeenPressed === true) {
+    characterSelectionScreen();
+    button.hasBeenPressed = false;
+  }
+  else {
+    play();
+  } 
 }
 
 class Button {
-  constructor(x, y, height, width, color, text ) {
+  constructor(x, y, height, width, color, text) {
     this.x = x;
     this.y = y;
     this.height = height;
     this.width = width;
     this.color = color;
     this.text = text;
-    this.hasBeenPressed = false;
+    this.textSize = size;
+    this.textAlign = (CENTER, CENTER);
+    this.rectMode = CENTER;
+    this.hasBeenPressed = true;
   }
-
+  
   //if mouse is hovering over button
   display() {
     if (dist(mouseX, mouseY, this.width/2 - this.x, this.height) <= this.size) {
-
       fill(220);
     }
     else {
       fill(180);
     }
-    
-    //display button
-    fill(this.color);
-    textSize(this.size);
-    textAlign(CENTER, CENTER);
-    text(this.text, this.x, this.y);
-    rectMode(CENTER);
-    rect(this.x, this.y, this.height, this.width);
-  }
+  } 
     
   //if mouse pressed on button
   mousePressed() {
-    if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
-      this.hasBeenPressed;
+    if (mouseX = x + width && (mouseY = y + length)) {
+      this.hasBeenPressed = true;
     }
   } 
 }
@@ -97,15 +98,23 @@ function startScreen() {
   button.mousePressed();
 }
 
+function characterSelectionScreen() {
+
+}
+
+function play() {
+
+}
+
 
 let abilityText = { attackText: text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"),
   defendText: text("defend: block if enemy in attack mode"),
   parryText: text("defend: block if enemy in attack mode"),
-}
+};
 
 
 
-display() {;
+function abilityButtons() {
   if (button.hasBeenPressed = true && button.mousePressed()) {
     abilityText[attackText];
   }
@@ -118,8 +127,6 @@ display() {;
     abilityText[parryText];
   }
 }
-
-
 
 //ability descriptions
 //text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode")
