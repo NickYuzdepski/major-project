@@ -28,23 +28,25 @@ function draw() {
     background(backgroundImage);
   }
 }
-rec
+
 class Button {
-  constructor(x, y, text ) {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.text = text;
+    this.textSize = 10;
+    this.textAlign = CENTER, CENTER;
     this.hasBeenPressed = false;
 
-    display() {
-      this.rect = (10, 10)
+    display(height, width, text) ;{
+      this.text = text;
+      this.rect = (this.height, this.width);
       this.color = "grey";
     }
   }
 
   //if mouse pressed on button
   mousePressed() {
-    if (mouseX = this.x + this.width && (mouseY = this.y + this.length)) {
+    if (mouseX = (this.x + this.width && mouseY) = (this.y + this.length)) {
       this.hasBeenPressed = true; 
     }
   } 
@@ -75,9 +77,7 @@ function startScreen() {
   textSize(40);
   textAlign(CENTER, CENTER);
   text("Duel!");
-  button.x = 200;
-  button.y = 300;
-  button.display();
+  button.display(20,20, "play");
 }
 
 let abilityText = { 
@@ -87,15 +87,15 @@ let abilityText = {
 };
 
 function displayAbilityButtons() {
-  if (button.hasBeenPressed = true) {
+  if (button.hasBeenPressed === true) {
     abilityText[attackText];
   }
 
-  if (button.hasBeenPressed = true) {
+  if (button.hasBeenPressed === true) {
     abilityText[defendText];
   }
 
-  if (button.hasBeenPressed = true) {
+  if (button.hasBeenPressed === true) {
     abilityText[parryText];
   }
 
