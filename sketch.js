@@ -17,7 +17,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowHeight, windowHeight);
-  button = new Button();
+  button = new Button(x, y, height, width);
   samurai = new Samurai();
   darkSamurai = new DarkSamurai();
 }
@@ -25,33 +25,45 @@ function setup() {
 function draw() {
   startScreen();
   if (button.mousePressed()) {
-    background(backgroundImage);
+    play();
   }
 }
 
 class Button {
-  constructor(x, y) {
+  constructor(x, y, rectHeight, rectWidth, text) {
     this.x = x;
     this.y = y;
+    this.rectHeight = rectHeight;
+    this.rectWidth = rectWidth;
+    this.text = text;
     this.textSize = 10;
-    this.textAlign = CENTER, CENTER;
+    this.textAlign = CENTER;
     this.hasBeenPressed = false;
-
-    display(height, width, text) ;{
-      this.text = text;
-      this.rect = (this.height, this.width);
-      this.color = "grey";
+    this.rect = (this.height, this.width);
+    this.color = "grey";
     }
-  }
+    
+    position(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+    
+    display(text) {
+      fill(this.color);
+      text(this.text, this.x, this.y);
+      textSize(this.textSize);
+      textAlign(this.textAlign);
+      rect(this.rectHeight, this.rectWidth);
+    }
 
-  //if mouse pressed on button
-  mousePressed() {
-    if (mouseX = (this.x + this.width && mouseY) = (this.y + this.length)) {
-      this.hasBeenPressed = true; 
+    //if mouse pressed on button
+    mousePressed() {
+      if (mouseX = (this.x + this.width && mouseY) = (this.y + this.length)) {
+        this.hasBeenPressed = true; 
     }
   } 
 }
- 
+
 class Samurai {
   constructor(x, y, height, width) {
     this.x = x;
@@ -59,12 +71,13 @@ class Samurai {
     this.height = height;
     this.width = width;
     this.image = samuraiImage;
-
   }
 }
 
 class DarkSamurai {
   constructor(x, y, height, width) {
+    this.x = x;
+    this.y = y;
     this.height = height;
     this.width = width;
     this.image = darkSamuraiImage;
@@ -72,19 +85,24 @@ class DarkSamurai {
 }
 
 function startScreen() {
-  fill("white");
+  background("white")
+  text("Duel!", 200, 100);
   textFont("Brush Script");
   textSize(40);
-  textAlign(CENTER, CENTER);
-  text("Duel!");
-  button.display(20,20, "play");
+  textAlign(CENTER);
+  button.position(200, 300);
+  button.display("play");
+}
+
+function play() {
+  background(backgroundImage);
 }
 
 let abilityText = { 
   attackText: text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"),
   defendText: text("defend: block if enemy in attack mode"),
   parryText: text("next attack will deal 2x damage, while in this mode, vulnerable to attack"),
-};
+}
 
 function displayAbilityButtons() {
   if (button.hasBeenPressed === true) {
