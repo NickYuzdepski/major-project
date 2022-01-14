@@ -67,30 +67,36 @@ class Button {
 }
 
 class Samurai {
-  constructor(x, y, height, width) {
-    this.x = x;
-    this.y = y;
-    this.height = height;
-    this.width = width;
+  constructor() {
+    this.x = windowWidth*0.25;
+    this.y = windowHeight*0.5;
     this.image = samuraiImage;
   }
 
-  display() {
+  position() {
+    this.x = windowWidth*0.25;
+    this.y = windowHeight*0.5;
+  }
 
+  display() {
+    image(samuraiImage);
   }
 }
 
 class DarkSamurai {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  constructor() {
+    this.x = windowWidth*0.75;
+    this.y = windowHeight*0.5;
     this.image = darkSamuraiImage;
   }
 
-  display() {
+  position() {
+    this.x = windowWidth*0.75;
+    this.y = windowHeight*0.5;
+  }
 
+  display() {
+    image(darkSamuraiImage);
   }
 }
 
@@ -114,6 +120,29 @@ class HealthBar {
   }
 }
 
+function keyPressed() {
+  //player 1 keys
+  if (key === "q") {
+    attack();
+  }  
+  if (key === "w") {
+    defend();
+  } 
+  if (key === "e") { 
+    parry(); 
+  }
+  //player 2 keys
+  if (key === "i") {
+    attack();
+  }
+  if (key === "o") {
+    defend();
+  }
+  if (key === "p") {
+    parry();  
+  }
+}
+
 function startScreen() {
   background(fill("white"));
   text("Duel!", windowWidth*0.5, windowHeight*0.25);
@@ -127,11 +156,11 @@ function startScreen() {
 
 function play() {
   background(backgroundImage);
+  samurai.position()
   samurai.display();
+  darkSamurai.position();
   darkSamurai.display();
-
 }
-
 
 let abilityText = { 
   attackText: text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"),
@@ -144,24 +173,18 @@ function displayAbilityButtons() {
     abilityText[attackText];
     abilityText[defendText];
     abilityText[parryText];
+  }
 }
 
+function attack() {
+  if (samurai.attack === true && samurai.parry === true) {
+  }
+}
 
+function defend() {
 
+}
 
+function parry() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//https://www.flickr.com/photos/rodrixap/10688206825
+}
