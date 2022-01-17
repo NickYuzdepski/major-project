@@ -2,13 +2,17 @@
 // Nicklas Yuzdepski
 // November 18, 2021
 
-let button;
 let backgroundImage;
+let samuraiImage;
+let darkSamuraiImage;
+let button;
+let x;
+let y; 
+let rectHeight;
+let rectWidth;
 let samurai;
 let darkSamurai;
 let healthBar;
-let samuraiImage;
-let darkSamuraiImage;
 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
@@ -19,9 +23,9 @@ function preload() {
 function setup() {
   createCanvas(windowHeight, windowHeight);
   button = new Button(x, y, rectHeight, rectWidth);
-  samurai = new Samurai(x, y, rectheight, rectWidth);
-  darkSamurai = new DarkSamurai(x, y, height, width);
-  healthBar = new HealthBar(x, y);
+  samurai = new Samurai();
+  darkSamurai = new DarkSamurai();
+  healthBar = new HealthBar();
 }
 
 function draw() {
@@ -80,6 +84,22 @@ class Samurai {
 
   display() {
     image(samuraiImage);
+    healthBar.display(windowWidth*0.25, windowHeight*0.4);
+  }
+
+  attackMode() {
+  }
+
+  defendMode() {
+
+  }
+  
+  parryMode() {
+    
+  }
+  
+  attack() {
+    darkSamurai.healthBar.damageTaken();
   }
 }
 
@@ -97,6 +117,11 @@ class DarkSamurai {
 
   display() {
     image(darkSamuraiImage);
+    healthBar.display(windowWidth*0.75, windowHeight*0.4);
+  }
+
+  attack() {
+    samurai.healthBar.damageTaken();
   }
 }
 
@@ -109,21 +134,23 @@ class HealthBar {
     this.color = "green";
   }
   
-  position(x, y) {
+  display(x, y) {
     this.x = x;
     this.y = y;
-  }
-  
-  display() {
     fill(this.color);
-    rect(this.height, this.width);
+    noStroke();
+    rect(this.width, this.height);
+  }
+
+  damageTaken() {
+    this.width - 0.25*this.width;
   }
 }
 
 function keyPressed() {
   //player 1 keys
   if (key === "q") {
-    attack();
+    samurai.attack();
   }  
   if (key === "w") {
     defend();
@@ -133,7 +160,7 @@ function keyPressed() {
   }
   //player 2 keys
   if (key === "i") {
-    attack();
+    darkSamurai.attack();
   }
   if (key === "o") {
     defend();
@@ -156,7 +183,7 @@ function startScreen() {
 
 function play() {
   background(backgroundImage);
-  samurai.position()
+  samurai.position();
   samurai.display();
   darkSamurai.position();
   darkSamurai.display();
@@ -169,6 +196,7 @@ let abilityText = {
 };
 
 function displayAbilityButtons() {
+  button.display("abilities");
   if (button.hasBeenPressed === true) {
     abilityText[attackText];
     abilityText[defendText];
@@ -176,15 +204,3 @@ function displayAbilityButtons() {
   }
 }
 
-function attack() {
-  if (samurai.attack === true && samurai.parry === true) {
-  }
-}
-
-function defend() {
-
-}
-
-function parry() {
-
-}
