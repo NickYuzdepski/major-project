@@ -11,6 +11,7 @@ let y;
 let rectHeight;
 let rectWidth;
 let samurai;
+let vulnerableToAttack = false;
 let darkSamurai;
 let healthBar;
 
@@ -88,19 +89,19 @@ class Samurai {
   }
 
   attackMode() {
+    vulnerableToAttack = true;
   }
 
   defendMode() {
+    vulnerableToAttack = false;
 
   }
   
   parryMode() {
+    vulnerableToAttack = true;
     
   }
   
-  attack() {
-    darkSamurai.healthBar.damageTaken();
-  }
 }
 
 class DarkSamurai {
@@ -120,8 +121,18 @@ class DarkSamurai {
     healthBar.display(windowWidth*0.75, windowHeight*0.4);
   }
 
-  attack() {
-    samurai.healthBar.damageTaken();
+  attackMode() {
+    vulnerableToAttack = true;
+  }
+
+  defendMode() {
+    vulnerableToAttack = false;
+
+  }
+  
+  parryMode() {
+    vulnerableToAttack = true;
+    
   }
 }
 
@@ -147,38 +158,56 @@ class HealthBar {
   }
 }
 
-function keyPressed() {
-  //player 1 keys
-  if (key === "q") {
-    samurai.attack();
+function abilities()
+  keyPressed() {
+  if (key === "a") {
+    samurai.attackMode();
+  }
   }  
-  if (key === "w") {
-    defend();
+  if (key === "") {
   } 
   if (key === "e") { 
-    parry(); 
-  }
-  //player 2 keys
-  if (key === "i") {
-    darkSamurai.attack();
-  }
-  if (key === "o") {
-    defend();
-  }
-  if (key === "p") {
-    parry();  
   }
 }
 
+
 function startScreen() {
   background(fill("white"));
-  text("Duel!", windowWidth*0.5, windowHeight*0.25);
   textFont("Brush Script");
   stroke(5);
-  textSize(40);
+  textSize(windowWidth*0.25);
   textAlign(CENTER);
-  button.position(windowWidth*0.5, windowHeight*0.5);
+  text("Duel!", windowWidth*0.5, windowHeight*0.25);
+  playButton();
+  informationButton();
+}
+
+function playButton() {
+  button.position(windowWidth*0.25, windowHeight*0.5);
   button.display("play");
+}
+
+function informationButton() {
+  button.position(windowWidth*0.75, windowHeight*0.5);
+  button.display("instructions");
+  if (button.hasBeenPressed === true) {
+    background(fill("white"));
+    button.position(windowWidth*0.01, windowHeight*0.01);
+    button.display("back");
+    
+    //title text
+    textSize(windowWidth*0.25);
+    textFont("Brush Script");
+    text("Duel Information", windowWidth*0.5, windowHeight*0.25);
+
+    //other text
+    textSize(windowWidth*0.1);
+    text("You are a traveler through ancient lands, voyaging into the unknown.", windowWidth*0.5, windowWidth*0.3);
+    text ("You find an ancient protector, strategically plan your moves to defeat them, escape with your life and emerge victorious", windowWidth*0.5, windowWidth*0.5);
+    
+    //image for controls
+    image(windowWidth*0.5, windowHeight*0.5);
+  }
 }
 
 function play() {
@@ -189,18 +218,9 @@ function play() {
   darkSamurai.display();
 }
 
-let abilityText = { 
-  attackText: text("attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"),
-  defendText: text("defend: block if enemy in attack mode"),
-  parryText: text("next attack will deal 2x damage, while in this mode, vulnerable to attack"),
-};
 
-function displayAbilityButtons() {
-  button.display("abilities");
-  if (button.hasBeenPressed === true) {
-    abilityText[attackText];
-    abilityText[defendText];
-    abilityText[parryText];
-  }
-}
+// "attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"
+// "defend: block if enemy in attack mode"
+// "next attack will deal 2x damage, while in this mode, vulnerable to attack"
+
 
