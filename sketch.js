@@ -12,6 +12,8 @@ let rectHeight;
 let rectWidth;
 let samurai;
 let vulnerableToAttack = false;
+let ableToBlock = false;
+let parryDamage = false;
 let darkSamurai;
 let healthBar;
 
@@ -23,7 +25,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowHeight, windowHeight);
-  button = new Button(x, y, rectHeight, rectWidth);
+  button = new Button();
   samurai = new Samurai();
   darkSamurai = new DarkSamurai();
   healthBar = new HealthBar();
@@ -37,16 +39,16 @@ function draw() {
 }
 
 class Button {
-  constructor(x, y, rectHeight, rectWidth, text) {
+  constructor() {
     this.x = x;
     this.y = y;
-    this.rectHeight = rectWidth;
-    this.rectWidth = rectHeight;
-    this.text = text;
+    this.rectHeight = windowWidth*0.25;
+    this.rectWidth = windowWidth*0.25;
+    this.text = text();
     this.textSize = 10;
     this.textAlign = CENTER;
     this.hasBeenPressed = false;
-    this.rect = (this.height, this.width);
+    this.rect = (this.rectHeight, this.rectWidth);
     this.color = "grey";
   }
     
@@ -73,71 +75,64 @@ class Button {
 
 class Samurai {
   constructor() {
-    this.x = windowWidth*0.25;
-    this.y = windowHeight*0.5;
     this.image = samuraiImage;
   }
 
-  position() {
-    this.x = windowWidth*0.25;
-    this.y = windowHeight*0.5;
-  }
-
   display() {
-    image(samuraiImage);
+    image(samuraiImage, windowWidth*0.25,  windowHeight*0.5);
     healthBar.display(windowWidth*0.25, windowHeight*0.4);
   }
 
   attackMode() {
     vulnerableToAttack = true;
+    ableToBlock = false;
+    parryDamage = false;
   }
 
   defendMode() {
     vulnerableToAttack = false;
-
+    ableToBlock = true;
+    parryDamage = false;
   }
   
   parryMode() {
     vulnerableToAttack = true;
-    
+    ableToBlock = false;
+    parryDamage = false;
   }
-  
 }
 
 class DarkSamurai {
   constructor() {
-    this.x = windowWidth*0.75;
-    this.y = windowHeight*0.5;
     this.image = darkSamuraiImage;
   }
 
-  position() {
-    this.x = windowWidth*0.75;
-    this.y = windowHeight*0.5;
-  }
-
   display() {
-    image(darkSamuraiImage);
+    image(darkSamuraiImage, windowWidth*0.75, windowHeight*0.5);
     healthBar.display(windowWidth*0.75, windowHeight*0.4);
   }
 
   attackMode() {
     vulnerableToAttack = true;
+    ableToBlock = false;
+    parryDamage = false;
   }
 
   defendMode() {
     vulnerableToAttack = false;
-
+    ableToBlock = false;
+    parryDamage = false;
   }
   
   parryMode() {
     vulnerableToAttack = true;
-    
+    ableToBlock = false;
+    parryDamage = false;
   }
 }
 
 class HealthBar {
-  constructor(x, y) {
+  constructor() {
     this.x = x; 
     this.y = y;
     this.width = 20;
@@ -156,20 +151,32 @@ class HealthBar {
   damageTaken() {
     this.width - 0.25*this.width;
   }
+
+  damageTakenFromParry() {
+    this.width - 0.5*this.width;
+  }
 }
 
-function abilities()
+function abilities() {
   keyPressed() {
-  if (key === "a") {
-    samurai.attackMode();
-  }
-  }  
-  if (key === "") {
-  } 
-  if (key === "e") { 
+    if (key === "a") {
+      samurai.attackMode();
+      if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
+        darkSamurai.damageTaken();
+      }
+    }  
+    if (key === "d") { 
+      samurai.defendMode();
+      //block next attack
+    } 
+    if (key === "p") { 
+      samurai.parryMode();
+      if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
+        darkSamurai.damageTakenFromParry()
+      }
+    }
   }
 }
-
 
 function startScreen() {
   background(fill("white"));
@@ -202,8 +209,10 @@ function informationButton() {
 
     //other text
     textSize(windowWidth*0.1);
+    textFont("Brush Script");
+    textMode(CENTER);
     text("You are a traveler through ancient lands, voyaging into the unknown.", windowWidth*0.5, windowWidth*0.3);
-    text ("You find an ancient protector, strategically plan your moves to defeat them, escape with your life and emerge victorious", windowWidth*0.5, windowWidth*0.5);
+    text ("You encounter an ancient protector. Strategically plan your moves to defeat them and escape with your life", windowWidth*0.5, windowWidth*0.5);
     
     //image for controls
     image(windowWidth*0.5, windowHeight*0.5);
@@ -212,15 +221,32 @@ function informationButton() {
 
 function play() {
   background(backgroundImage);
-  samurai.position();
   samurai.display();
-  darkSamurai.position();
   darkSamurai.display();
+  youWin();
+  youLose();
+}
+
+function youWin() {
+  if (darkSamurai healthBar = 0) {
+    textSize(windowWidth*0.5);
+    textFont("Brush Script");
+    textMode(CENTER);
+    text("You Win", windowHeight*0.5, windoWidth*0.5);
+  }
+}
+
+function youLose() {
+  if (samurai.healthBar = 0) {
+    textSize(windowWidth*0.5);
+    textFont("Brush Script");
+    textMode(CENTER);
+    text("You Lose", windowHeight*0.5, windoWidth*0.5);
+  }
 }
 
 
 // "attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"
 // "defend: block if enemy in attack mode"
 // "next attack will deal 2x damage, while in this mode, vulnerable to attack"
-
 
