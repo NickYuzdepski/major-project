@@ -80,25 +80,32 @@ class Samurai {
 
   display() {
     image(samuraiImage, windowWidth*0.25,  windowHeight*0.5);
+  }
+
+  health() {
     healthBar.display(windowWidth*0.25, windowHeight*0.4);
   }
 
+  healthLost() {
+    healthBar.damageTaken();
+  }
+  
   attackMode() {
-    vulnerableToAttack = true;
-    ableToBlock = false;
-    parryDamage = false;
+      vulnerableToAttack = true;
+      ableToBlock = false;
+      parryDamage = false;
   }
 
   defendMode() {
-    vulnerableToAttack = false;
-    ableToBlock = true;
-    parryDamage = false;
+      vulnerableToAttack = false;
+      ableToBlock = true;
+      parryDamage = false;
   }
   
   parryMode() {
-    vulnerableToAttack = true;
-    ableToBlock = false;
-    parryDamage = false;
+      vulnerableToAttack = true;
+      ableToBlock = false;
+      parryDamage = true;
   }
 }
 
@@ -109,7 +116,18 @@ class DarkSamurai {
 
   display() {
     image(darkSamuraiImage, windowWidth*0.75, windowHeight*0.5);
+  }
+
+  health() {
     healthBar.display(windowWidth*0.75, windowHeight*0.4);
+  }
+
+  healthLost() {
+    healthBar.damageTaken();
+  }
+
+  healthLossFromParry() {
+    healthBar.damageTakenFromParry();
   }
 
   attackMode() {
@@ -127,7 +145,7 @@ class DarkSamurai {
   parryMode() {
     vulnerableToAttack = true;
     ableToBlock = false;
-    parryDamage = false;
+    parryDamage = true;
   }
 }
 
@@ -135,8 +153,8 @@ class HealthBar {
   constructor() {
     this.x = x; 
     this.y = y;
-    this.width = 20;
-    this.height = 10;
+    this.width = windowWidth*0.2;
+    this.height = windowWidth*0.1;
     this.color = "green";
   }
   
@@ -157,26 +175,34 @@ class HealthBar {
   }
 }
 
-function abilities() {
+function samuraiAbilities() {
   keyPressed() {
     if (key === "a") {
       samurai.attackMode();
       if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
-        darkSamurai.damageTaken();
+        darkSamurai.healthLost();
       }
-    }  
+    }
     if (key === "d") { 
       samurai.defendMode();
       //block next attack
     } 
     if (key === "p") { 
       samurai.parryMode();
-      if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
-        darkSamurai.damageTakenFromParry()
-      }
     }
   }
 }
+
+
+function darkSamuraiAI() {
+  let chance = random(3);
+
+  if (chance = 1) {
+    darkSamurai.attackMode();
+  }
+
+}
+
 
 function startScreen() {
   background(fill("white"));
@@ -219,31 +245,37 @@ function informationButton() {
   }
 }
 
+gameMechhanics() {
+  
+
+  }
+}
+
 function play() {
   background(backgroundImage);
   samurai.display();
   darkSamurai.display();
-  youWin();
-  youLose();
-}
+//   youWin();
+//   youLose();
+// }
 
-function youWin() {
-  if (darkSamurai healthBar = 0) {
-    textSize(windowWidth*0.5);
-    textFont("Brush Script");
-    textMode(CENTER);
-    text("You Win", windowHeight*0.5, windoWidth*0.5);
-  }
-}
+// function youWin() {
+//   if (darkSamurai. = 0) {
+//     textSize(windowWidth*0.5);
+//     textFont("Brush Script");
+//     textMode(CENTER);
+//     text("You Win", windowHeight*0.5, windoWidth*0.5);
+//   }
+// }
 
-function youLose() {
-  if (samurai.healthBar = 0) {
-    textSize(windowWidth*0.5);
-    textFont("Brush Script");
-    textMode(CENTER);
-    text("You Lose", windowHeight*0.5, windoWidth*0.5);
-  }
-}
+// function youLose() {
+//   if (samurai. = 0) {
+//     textSize(windowWidth*0.5);
+//     textFont("Brush Script");
+//     textMode(CENTER);
+//     text("You Lose", windowHeight*0.5, windoWidth*0.5);
+//   }
+// }
 
 
 // "attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"
