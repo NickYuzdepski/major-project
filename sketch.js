@@ -2,6 +2,7 @@
 // Nicklas Yuzdepski
 // November 18, 2021
 
+//global variables
 let backgroundImage;
 let samuraiImage;
 let darkSamuraiImage;
@@ -11,12 +12,10 @@ let y;
 let rectHeight;
 let rectWidth;
 let samurai;
-let vulnerableToAttack = false;
-let ableToBlock = false;
-let parryDamage = false;
 let darkSamurai;
 let healthBar;
 
+//preload images 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
   samuraiImage = loadImage("assets/Samurai.png");
@@ -51,12 +50,14 @@ class Button {
     this.rect = (this.rectHeight, this.rectWidth);
     this.color = "grey";
   }
-    
+  
+  //set button position to and x and  y
   position(x, y) {
     this.x = x;
     this.y = y;
   }
-    
+  
+  //display basic button used for all buttons
   display(text) {
     fill(this.color);
     text(this.text, this.x, this.y);
@@ -91,21 +92,12 @@ class Samurai {
   }
   
   attackMode() {
-      vulnerableToAttack = true;
-      ableToBlock = false;
-      parryDamage = false;
   }
 
   defendMode() {
-      vulnerableToAttack = false;
-      ableToBlock = true;
-      parryDamage = false;
   }
   
   parryMode() {
-      vulnerableToAttack = true;
-      ableToBlock = false;
-      parryDamage = true;
   }
 }
 
@@ -131,21 +123,12 @@ class DarkSamurai {
   }
 
   attackMode() {
-    vulnerableToAttack = true;
-    ableToBlock = false;
-    parryDamage = false;
   }
 
   defendMode() {
-    vulnerableToAttack = false;
-    ableToBlock = false;
-    parryDamage = false;
   }
   
   parryMode() {
-    vulnerableToAttack = true;
-    ableToBlock = false;
-    parryDamage = true;
   }
 }
 
@@ -176,7 +159,7 @@ class HealthBar {
 }
 
 function samuraiAbilities() {
-  keyPressed() {
+  function keyPressed() {
     if (key === "a") {
       samurai.attackMode();
       if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
@@ -185,24 +168,40 @@ function samuraiAbilities() {
     }
     if (key === "d") { 
       samurai.defendMode();
-      //block next attack
     } 
     if (key === "p") { 
       samurai.parryMode();
     }
+    if (samurai.parryMode()) {
+      if (key === "p") {
+        darkSamurai.healthLossFromParry();
+      }
+    }
   }
 }
-
 
 function darkSamuraiAI() {
   let chance = random(3);
 
-  if (chance = 1) {
+  if (chance === 1) {
     darkSamurai.attackMode();
+    if (samurai.attackMode() || samurai.parryMode()) {
+      samurai.healthLost();
+    }
   }
-
+  if (chance === 2) {
+    darkSamurai.defendMode();
+  }
+  if (chance === 3) {
+    darkSamurai.parryMode();
+    
+    if (darkSamurai.parryMode()) {
+      if (chance === 3) {
+        samurai.healthLossFromParry();
+      }
+    }
+  }
 }
-
 
 function startScreen() {
   background(fill("white"));
@@ -218,15 +217,21 @@ function startScreen() {
 function playButton() {
   button.position(windowWidth*0.25, windowHeight*0.5);
   button.display("play");
+  if (button.mousePressed()) {
+    play();
+  }
 }
 
 function informationButton() {
   button.position(windowWidth*0.75, windowHeight*0.5);
   button.display("instructions");
-  if (button.hasBeenPressed === true) {
+  if (button.mousePressed()) {
     background(fill("white"));
     button.position(windowWidth*0.01, windowHeight*0.01);
     button.display("back");
+    if (button.mousePressed()) {
+      startScreen();
+    }
     
     //title text
     textSize(windowWidth*0.25);
@@ -236,7 +241,7 @@ function informationButton() {
     //other text
     textSize(windowWidth*0.1);
     textFont("Brush Script");
-    textMode(CENTER);
+    textAlign(CENTER);
     text("You are a traveler through ancient lands, voyaging into the unknown.", windowWidth*0.5, windowWidth*0.3);
     text ("You encounter an ancient protector. Strategically plan your moves to defeat them and escape with your life", windowWidth*0.5, windowWidth*0.5);
     
@@ -245,22 +250,19 @@ function informationButton() {
   }
 }
 
-gameMechhanics() {
-  
-
-  }
-}
-
 function play() {
   background(backgroundImage);
   samurai.display();
   darkSamurai.display();
+}
+
+
 //   youWin();
 //   youLose();
 // }
 
 // function youWin() {
-//   if (darkSamurai. = 0) {
+//   if (darkSamurai = 0) {
 //     textSize(windowWidth*0.5);
 //     textFont("Brush Script");
 //     textMode(CENTER);
@@ -278,7 +280,16 @@ function play() {
 // }
 
 
-// "attack: deal damage to enemy if enemy in attack mode or enemy in parry mode"
-// "defend: block if enemy in attack mode"
-// "next attack will deal 2x damage, while in this mode, vulnerable to attack"
+// "attack: press "a" to deal damage to enemy if enemy in attack mode or enemy in parry mode, enemy can damage you in this mode
+// "defend: press "d" to block if enemy in attack mode or if enemy in parry mode, enemy cannot damage you while in this mode
+// "parry: press "p" to enter parry mode, press "p" again to deal 2x attack damage to enemy, enemy can damage you in this mode
 
+
+
+
+//To finish: 
+// - differentiate multiple button.mousePressed() functions
+// - define attack, defend and parry mode functions
+// - turn delay and order
+// - create health completely lost condition for win and lose
+// - sound effects and music
