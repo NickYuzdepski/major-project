@@ -12,7 +12,12 @@ let y;
 let rectHeight;
 let rectWidth;
 let samurai;
+let attackMode;
+let defendMode;
+let parryMode;
 let darkSamurai;
+let healthAmount;
+let darkSamuraiAIToggle = false;
 let healthBar;
 
 //preload images 
@@ -25,16 +30,14 @@ function preload() {
 function setup() {
   createCanvas(windowHeight, windowHeight);
   button = new Button();
-  samurai = new Samurai();
+  samurai = new Samurai(attackMode, defendMode, parryMode);
   darkSamurai = new DarkSamurai();
   healthBar = new HealthBar();
 }
 
 function draw() {
   startScreen();
-  if (button.mousePressed()) {
-    play();
-  }
+  keyPressed();
 }
 
 class Button {
@@ -51,7 +54,7 @@ class Button {
     this.color = "grey";
   }
   
-  //set button position to and x and  y
+  //set button position to an x and y
   position(x, y) {
     this.x = x;
     this.y = y;
@@ -75,8 +78,11 @@ class Button {
 }
 
 class Samurai {
-  constructor() {
+  constructor(attackMode, defendMode, parryMode) {
     this.image = samuraiImage;
+    this.attackMode = attackMode;
+    this.defendMode = defendMode;
+    this.parryMode = parryMode;
   }
 
   display() {
@@ -87,23 +93,22 @@ class Samurai {
     healthBar.display(windowWidth*0.25, windowHeight*0.4);
   }
 
-  healthLost() {
-    healthBar.damageTaken();
-  }
-  
-  attackMode() {
+  amountOfHealth(healthAmount) {
+    healthAmount = healthBar.width;
   }
 
-  defendMode() {
-  }
-  
-  parryMode() {
+  healthLost() {
+    healthBar.damageTaken();
   }
 }
 
 class DarkSamurai {
-  constructor() {
+  constructor(attackMode, defendMode, parryMode) {
     this.image = darkSamuraiImage;
+    this.attackMode = attackMode;
+    this.defendMode = defendMode;
+    this.parryMode = parryMode;
+    this.healthAmount = healthBar.width;
   }
 
   display() {
@@ -114,21 +119,16 @@ class DarkSamurai {
     healthBar.display(windowWidth*0.75, windowHeight*0.4);
   }
 
+  amountOfHealth(healthAmount) {
+    healthAmount = healthBar.width;
+  }
+
   healthLost() {
     healthBar.damageTaken();
   }
 
   healthLossFromParry() {
     healthBar.damageTakenFromParry();
-  }
-
-  attackMode() {
-  }
-
-  defendMode() {
-  }
-  
-  parryMode() {
   }
 }
 
@@ -158,24 +158,26 @@ class HealthBar {
   }
 }
 
-function samuraiAbilities() {
-  function keyPressed() {
-    if (key === "a") {
-      samurai.attackMode();
-      if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
-        darkSamurai.healthLost();
-      }
+function keyPressed() {
+  if (key === "a") {
+    samurai.attackMode();
+    if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
+      darkSamurai.healthLost();
     }
-    if (key === "d") { 
-      samurai.defendMode();
-    } 
-    if (key === "p") { 
-      samurai.parryMode();
-    }
-    if (samurai.parryMode()) {
-      if (key === "p") {
-        darkSamurai.healthLossFromParry();
-      }
+    darkSamuraiAIToggle = true;
+  }
+  if (key === "d") { 
+    samurai.defendMode();
+    darkSamuraiAIToggle = true;
+  }
+
+  if (key === "p") { 
+    samurai.parryMode();
+    darkSamuraiAIToggle = true;
+  }
+  if (samurai.parryMode()) {
+    if (key === "p") {
+      darkSamurai.healthLossFromParry();
     }
   }
 }
@@ -254,30 +256,31 @@ function play() {
   background(backgroundImage);
   samurai.display();
   darkSamurai.display();
+  if (darkSamuraiAIToggle === true) {
+    darkSamuraiAI();
+    darkSamuraiAIToggle = false;
+  }
+  youWin();
+  youLose();
 }
 
+function youWin() {
+  if (darkSamurai.amountOfHealt(healthAmount === 0)) {
+    textSize(windowWidth*0.5);
+    textFont("Brush Script");
+    textAlign(CENTER);
+    text("You Win", windowHeight*0.5, windowWidth*0.5);
+  }
+}
 
-//   youWin();
-//   youLose();
-// }
-
-// function youWin() {
-//   if (darkSamurai = 0) {
-//     textSize(windowWidth*0.5);
-//     textFont("Brush Script");
-//     textMode(CENTER);
-//     text("You Win", windowHeight*0.5, windoWidth*0.5);
-//   }
-// }
-
-// function youLose() {
-//   if (samurai. = 0) {
-//     textSize(windowWidth*0.5);
-//     textFont("Brush Script");
-//     textMode(CENTER);
-//     text("You Lose", windowHeight*0.5, windoWidth*0.5);
-//   }
-// }
+function youLose() {
+  if (samurai.amountOfHealth(healthAmount === 0)) {
+    textSize(windowWidth*0.5);
+    textFont("Brush Script");
+    textAlign(CENTER);
+    text("You Lose", windowHeight*0.5, windowWidth*0.5);
+  }
+}
 
 
 // "attack: press "a" to deal damage to enemy if enemy in attack mode or enemy in parry mode, enemy can damage you in this mode
@@ -285,11 +288,6 @@ function play() {
 // "parry: press "p" to enter parry mode, press "p" again to deal 2x attack damage to enemy, enemy can damage you in this mode
 
 
-
-
 //To finish: 
 // - differentiate multiple button.mousePressed() functions
-// - define attack, defend and parry mode functions
-// - turn delay and order
-// - create health completely lost condition for win and lose
 // - sound effects and music
