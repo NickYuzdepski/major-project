@@ -4,6 +4,7 @@
 
 //global variables
 let backgroundImage;
+let backgroundMusic;
 let samuraiImage;
 let darkSamuraiImage;
 let button;
@@ -20,17 +21,20 @@ let healthAmount;
 let darkSamuraiAIToggle = false;
 let healthBar;
 
-//preload images 
+//preload assets 
 function preload() {
   backgroundImage = loadImage("assets/sunset-field.jpg");
   samuraiImage = loadImage("assets/Samurai.png");
   darkSamuraiImage = loadImage("assets/Dark-Samurai.png");
+  backgroundMusic = loadSound()
 }
+
+
 
 function setup() {
   createCanvas(windowHeight, windowHeight);
   button = new Button();
-  samurai = new Samurai(attackMode, defendMode, parryMode);
+  samurai = new Samurai();
   darkSamurai = new DarkSamurai();
   healthBar = new HealthBar();
 }
@@ -78,11 +82,11 @@ class Button {
 }
 
 class Samurai {
-  constructor(attackMode, defendMode, parryMode) {
+  constructor() {
     this.image = samuraiImage;
-    this.attackMode = attackMode;
-    this.defendMode = defendMode;
-    this.parryMode = parryMode;
+    this.attackMode = false;
+    this.defendMode = false;
+    this.parryMode = false;
   }
 
   display() {
@@ -103,11 +107,11 @@ class Samurai {
 }
 
 class DarkSamurai {
-  constructor(attackMode, defendMode, parryMode) {
+  constructor() {
     this.image = darkSamuraiImage;
-    this.attackMode = attackMode;
-    this.defendMode = defendMode;
-    this.parryMode = parryMode;
+    this.attackMode = false;
+    this.defendMode = false;
+    this.parryMode = false;
     this.healthAmount = healthBar.width;
   }
 
@@ -160,25 +164,32 @@ class HealthBar {
 
 function keyPressed() {
   if (key === "a") {
-    samurai.attackMode();
-    if (darkSamurai.attackMode() || darkSamurai.parryMode()) {
+    if (darkSamurai.attackMode === true || darkSamurai.parryMode === true) {
       darkSamurai.healthLost();
+      samurai.attackMode = true;
     }
     darkSamuraiAIToggle = true;
   }
   if (key === "d") { 
-    samurai.defendMode();
+    samurai.defendMode = true;
+    samurai.attackMode = false;
+    samurai.parryMode = false;
     darkSamuraiAIToggle = true;
   }
 
   if (key === "p") { 
-    samurai.parryMode();
+    samurai.parryMode = true;
+    samurai.attackmode = false;
+    samurai.defendMode = false;
     darkSamuraiAIToggle = true;
   }
-  if (samurai.parryMode()) {
+  if (samurai.parryMode === true) {
     if (key === "p") {
-      darkSamurai.healthLossFromParry();
+      if (darkSamurai.attackMode === true || darkSamurai.parryMode === true) {
+        darkSamurai.healthLossFromParry();
+      }  
     }
+    darkSamuraiAIToggle = true;
   }
 }
 
@@ -265,7 +276,7 @@ function play() {
 }
 
 function youWin() {
-  if (darkSamurai.amountOfHealt(healthAmount === 0)) {
+  if (darkSamurai.amountOfHealth(healthAmount === 0)) {
     textSize(windowWidth*0.5);
     textFont("Brush Script");
     textAlign(CENTER);
