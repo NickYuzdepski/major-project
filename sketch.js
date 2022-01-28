@@ -292,13 +292,3 @@ function youLose() {
     text("You Lose", windowHeight*0.5, windowWidth*0.5);
   }
 }
-
-
-// "attack: press "a" to deal damage to enemy if enemy in attack mode or enemy in parry mode, enemy can damage you in this mode
-// "defend: press "d" to block if enemy in attack mode or if enemy in parry mode, enemy cannot damage you while in this mode
-// "parry: press "p" to enter parry mode, press "p" again to deal 2x attack damage to enemy, enemy can damage you in this mode
-
-
-//To finish: 
-// - differentiate multiple button.mousePressed() functions
-// - sound effects and music
