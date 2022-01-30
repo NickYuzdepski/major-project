@@ -2,293 +2,314 @@
 // Nicklas Yuzdepski
 // November 18, 2021
 
-//global variables
+//global variable
 let backgroundImage;
 let backgroundMusic;
 let samuraiImage;
 let darkSamuraiImage;
-let button;
-let x;
-let y; 
-let rectHeight;
-let rectWidth;
+let attackSound;
+let defendSound;
+let parrySound;
+let playButton;
+let instructionsButton;
+let backButton;
 let samurai;
-let attackMode;
-let defendMode;
-let parryMode;
+let samuraiAttackMode = false;
+let samuraiDefendMode = false;
+let samuraiParryMode = false;
+let darkSamuraiAttackMode = false;
+let darkSamuraiDefendMode = false;
+let darkSamuraiParryMode = false;
 let darkSamurai;
-let healthAmount;
+let samuraiHealthBar;
+let darkSamuraiHealthBar;
 let darkSamuraiAIToggle = false;
-let healthBar;
 
 //preload assets 
 function preload() {
-  backgroundImage = loadImage("assets/sunset-field.jpg");
-  samuraiImage = loadImage("assets/Samurai.png");
-  darkSamuraiImage = loadImage("assets/Dark-Samurai.png");
-  backgroundMusic = loadSound()
+  soundFormats("mp3");
+  backgroundImage = loadImage("assets/sunsetfield.jpg");
+  //backgroundMusic = loadSound("assets/samuraimusic.mp3");
+  samuraiImage = loadImage("assets/samurai.png");
+  darkSamuraiImage = loadImage("assets/darksamurai.png");
+  //attackSound = loadSound("assets/attacksound.mp3");
+  //defendSound = loadSound("assets/defendsound.mp3");
+  //parrySound = loadSound("assets/parrysound.mp3");
 }
 
-
-
 function setup() {
-  createCanvas(windowHeight, windowHeight);
-  button = new Button();
+  createCanvas(windowWidth, windowHeight);
+  playButton = new Button(windowWidth*0.25, windowHeight*0.5, "black", "play");
+  instructionsButton = new Button(windowWidth*0.6, windowHeight*0.5, "black", "instructions");
+  backButton = (windowWidth*0.1, windowHeight*0.1, "grey");
   samurai = new Samurai();
   darkSamurai = new DarkSamurai();
-  healthBar = new HealthBar();
+  samuraiHealthBar = new HealthBar(windowWidth*0.25, windowHeight*0.47);
+  darkSamuraiHealthBar = new HealthBar(windowWidth*0.75, windowHeight*0.47);
 }
 
 function draw() {
-  startScreen();
+  //backgroundMusic.play();
+  //startScreen();
   keyPressed();
-}
+  //if (playButton.mousePressed()) {
+    playGame();
+  //}
+  //if (instructionsButton.mousePressed()) {
+    //instructionsScreen();
+  //}
+ }
 
+//button constructor used for all buttons
 class Button {
-  constructor() {
+  constructor(x, y, theColor, theText) {
     this.x = x;
     this.y = y;
-    this.rectHeight = windowWidth*0.25;
-    this.rectWidth = windowWidth*0.25;
-    this.text = text();
-    this.textSize = 10;
-    this.textAlign = CENTER;
+    this.color = theColor;
+    this.text = theText;
     this.hasBeenPressed = false;
-    this.rect = (this.rectHeight, this.rectWidth);
-    this.color = "grey";
   }
   
-  //set button position to an x and y
-  position(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  
-  //display basic button used for all buttons
-  display(text) {
+//display button
+  display() {
+    noStroke();
+    fill("grey");
+    rect(this.x, this.y, 200, 200);
     fill(this.color);
-    text(this.text, this.x, this.y);
-    textSize(this.textSize);
-    textAlign(this.textAlign);
-    rect(this.rectWidth, this.rectHeight);
+    textSize(0.025*windowWidth);
+    textAlign(CENTER);
+    text(this.text, this.x + 100, this.y + 100);
   }
 
-  //if mouse pressed on button
-  mousePressed() {
-    if (mouseX <= this.x + this.rectWidth && mouseY <= this.y + this.rectHeight) {
-      this.hasBeenPressed = true; 
+  isPointInsideButton() {
+    if (dist(mouseX, mouseY, this.x, this.y) < 200) {
+      //inside button
+      return true;
     }
+    else {
+      return false;
+    }
+  }
+
+  //if mouse pressed in button
+  mousePressed() {
+    if (isPointInsideButton() === true) {
+      this.hasBeenPressed = true;  
+    }    
   } 
 }
 
+//samurai class
 class Samurai {
   constructor() {
+    this.x = windowWidth*0.2;
+    this.y = windowHeight*0.7;
     this.image = samuraiImage;
-    this.attackMode = false;
-    this.defendMode = false;
-    this.parryMode = false;
   }
 
   display() {
-    image(samuraiImage, windowWidth*0.25,  windowHeight*0.5);
-  }
-
-  health() {
-    healthBar.display(windowWidth*0.25, windowHeight*0.4);
-  }
-
-  amountOfHealth(healthAmount) {
-    healthAmount = healthBar.width;
-  }
-
-  healthLost() {
-    healthBar.damageTaken();
+    imageMode(CENTER);
+    image(this.image, this.x, this.y);
   }
 }
 
+//dark samurai class
 class DarkSamurai {
   constructor() {
+    this.x = windowWidth*0.75;
+    this.y = windowHeight*0.7;
     this.image = darkSamuraiImage;
-    this.attackMode = false;
-    this.defendMode = false;
-    this.parryMode = false;
-    this.healthAmount = healthBar.width;
   }
 
   display() {
-    image(darkSamuraiImage, windowWidth*0.75, windowHeight*0.5);
-  }
-
-  health() {
-    healthBar.display(windowWidth*0.75, windowHeight*0.4);
-  }
-
-  amountOfHealth(healthAmount) {
-    healthAmount = healthBar.width;
-  }
-
-  healthLost() {
-    healthBar.damageTaken();
-  }
-
-  healthLossFromParry() {
-    healthBar.damageTakenFromParry();
+    imageMode(CENTER);
+    image(this.image, this.x, this.y, 450, 450);
   }
 }
 
+//health bar class used for all health bars
 class HealthBar {
-  constructor() {
+  constructor(x, y) {
     this.x = x; 
     this.y = y;
-    this.width = windowWidth*0.2;
-    this.height = windowWidth*0.1;
+    this.width = windowWidth*0.13;
+    this.height = windowHeight*0.03;
     this.color = "green";
   }
   
-  display(x, y) {
-    this.x = x;
-    this.y = y;
+  //display health bar 
+  display() {
     fill(this.color);
     noStroke();
-    rect(this.width, this.height);
+    rectMode(CENTER);
+    rect(this.x, this.y, this.width, this.height);
   }
 
+  //health bar width decreased by 25% when this function is called
   damageTaken() {
-    this.width - 0.25*this.width;
+    this.width -= 0.25*this.width;
   }
 
+  //health bar width decreased by 50% when this function is called
   damageTakenFromParry() {
-    this.width - 0.5*this.width;
+    this.width -= 0.5*this.width;
   }
 }
 
+//player logic for keys pressed
 function keyPressed() {
   if (key === "a") {
-    if (darkSamurai.attackMode === true || darkSamurai.parryMode === true) {
-      darkSamurai.healthLost();
-      samurai.attackMode = true;
+    //change ability modes
+    samuraiAttackMode = true;
+    samuraiDefendMode = false;
+    samuraiParryMode = false;
+      //check to see if able to damage enemy
+      if (darkSamuraiAttackMode === true || darkSamuraiParryMode === true) {
+        darkSamuraiHealthBar.damageTaken();
+        attackSound.play();
+        //darkSamuraiAI function called 
+        darkSamuraiAIToggle = true;
+      }
+      //darkSamuraiAI function called even if unable to damage enemy
+      else {
+        darkSamuraiAIToggle = true;
     }
-    darkSamuraiAIToggle = true;
   }
   if (key === "d") { 
-    samurai.defendMode = true;
-    samurai.attackMode = false;
-    samurai.parryMode = false;
+    samuraiDefendMode = true;
+    samuraiAttackMode = false;
+    samuraiParryMode = false;
+    defendSound.play();
     darkSamuraiAIToggle = true;
   }
-
   if (key === "p") { 
-    samurai.parryMode = true;
-    samurai.attackmode = false;
-    samurai.defendMode = false;
+    samuraiParryMode = true;
+    samuraiAttackMode = false;
+    samuraiDefendMode = false;
     darkSamuraiAIToggle = true;
   }
-  if (samurai.parryMode === true) {
+  if (samuraiParryMode === true) {
+    // if "p" is pressed again while in parry mode
     if (key === "p") {
-      if (darkSamurai.attackMode === true || darkSamurai.parryMode === true) {
-        darkSamurai.healthLossFromParry();
+      if (darkSamuraiAttackMode === true || darkSamuraiParryMode === true) {
+        darkSamuraiHealthBar.damageTakenFromParry();
+        parrySound.play();
+        darkSamuraiAIToggle = true;
+      }
+      else {
+        darkSamuraiAIToggle = true;
       }  
     }
-    darkSamuraiAIToggle = true;
   }
 }
 
+//AI logic
 function darkSamuraiAI() {
-  let chance = random(3);
+  //AI abilities each set to a random chance of 3 numbers
+  let chance = random(1, 4);
 
+  //same logic as player except abilities occur with chance instead of pressing a key
   if (chance === 1) {
-    darkSamurai.attackMode();
-    if (samurai.attackMode() || samurai.parryMode()) {
-      samurai.healthLost();
+    darkSamuraiAttackMode = true;
+    darkSamuraiDefendMode = false;
+    darkSamuraiParryMode = false;
+    if (samuraiAttackMode === true ||  samuraiParryMode === true) {
+      samuraiHealthBar.damageTaken();
+      attackSound.play();
+      darkSamuraiAIToggle = false;
+    }
+    else {
+      darkSamuraiAIToggle = false;
     }
   }
   if (chance === 2) {
-    darkSamurai.defendMode();
+    darkSamuraiDefendMode = true;
+    darkSamuraiAttackMode = false;
+    darkSamuraiParryMode = false;
+    defendSound.play();
+    darkSamuraiAIToggle = false;
   }
   if (chance === 3) {
-    darkSamurai.parryMode();
+    darkSamuraiParryMode = true;
+    darkSamuraiAttackMode = false;
+    darkSamuraiDefendMode = false;
+    darkSamuraiAIToggle = false;
     
-    if (darkSamurai.parryMode()) {
+    if (darkSamuraiParryMode = true) {
       if (chance === 3) {
-        samurai.healthLossFromParry();
+        if (samuraiAttackMode === true || samuraiParryMode === true)  {
+            samurai.damageTakenFromParry();
+            parrySound.play();
+        }
       }
     }
-  }
+  }  
 }
 
 function startScreen() {
-  background(fill("white"));
-  textFont("Brush Script");
+  background("white");
   stroke(5);
-  textSize(windowWidth*0.25);
+  textSize(windowWidth*0.1);
   textAlign(CENTER);
-  text("Duel!", windowWidth*0.5, windowHeight*0.25);
-  playButton();
-  informationButton();
+  text("Duel!", windowWidth*0.5, windowHeight*0.2);
+  fill("black");
+  playButton.display();
+  instructionsButton.display()
 }
 
-function playButton() {
-  button.position(windowWidth*0.25, windowHeight*0.5);
-  button.display("play");
-  if (button.mousePressed()) {
-    play();
-  }
-}
-
-function informationButton() {
-  button.position(windowWidth*0.75, windowHeight*0.5);
-  button.display("instructions");
-  if (button.mousePressed()) {
-    background(fill("white"));
-    button.position(windowWidth*0.01, windowHeight*0.01);
-    button.display("back");
-    if (button.mousePressed()) {
+function instructionsScreen() {
+  if (instructionsButton.mousePressed()) {
+    background("white");
+    //title text
+    textSize(windowWidth*0.1);
+    textAlign(CENTER);
+    stroke(5);
+    text("Duel Information", windowWidth*0.5, windowHeight*0.2);
+    //instructions text
+    textSize(windowWidth*0.015);
+    textAlign(CENTER);
+    text("You are a traveler through ancient lands, voyaging into the unknown.", windowWidth*0.5, windowHeight*0.3);
+    text("You encounter an ancient protector of a tomb: a dark samurai.", windowWidth*0.5, windowHeight*0.4);
+    text("Strategically plan your moves to defeat them and escape with your life.", windowWidth*0.5, windowHeight*0.5);
+    text("Press a to attack, press d to defend yourself and press p to parry for 2x damage next time you press p.", windowWidth*0.5, windowHeight*0.6);
+    backButton.display();
+    //if back button pressed sends user back to startscreen
+    if (backButton.mousePressed()) {
       startScreen();
     }
-    
-    //title text
-    textSize(windowWidth*0.25);
-    textFont("Brush Script");
-    text("Duel Information", windowWidth*0.5, windowHeight*0.25);
-
-    //other text
-    textSize(windowWidth*0.1);
-    textFont("Brush Script");
-    textAlign(CENTER);
-    text("You are a traveler through ancient lands, voyaging into the unknown.", windowWidth*0.5, windowWidth*0.3);
-    text ("You encounter an ancient protector. Strategically plan your moves to defeat them and escape with your life", windowWidth*0.5, windowWidth*0.5);
-    
-    //image for controls
-    image(windowWidth*0.5, windowHeight*0.5);
   }
 }
 
-function play() {
-  background(backgroundImage);
+//main gameplay
+function playGame() {
+  imageMode(CENTER);
+  //image(backgroundImage, windowWidth/2, windowHeight/2, windowWidth, windowHeight);
   samurai.display();
+  samuraiHealthBar.display();
   darkSamurai.display();
+  darkSamuraiHealthBar.display();
   if (darkSamuraiAIToggle === true) {
     darkSamuraiAI();
-    darkSamuraiAIToggle = false;
   }
   youWin();
   youLose();
 }
 
 function youWin() {
-  if (darkSamurai.amountOfHealth(healthAmount === 0)) {
-    textSize(windowWidth*0.5);
-    textFont("Brush Script");
+  //win condition
+  if (darkSamuraiHealthBar.width = 0) {
+    textSize(windowWidth*0.3);
     textAlign(CENTER);
     text("You Win", windowHeight*0.5, windowWidth*0.5);
   }
 }
 
 function youLose() {
-  if (samurai.amountOfHealth(healthAmount === 0)) {
-    textSize(windowWidth*0.5);
-    textFont("Brush Script");
+  //lose condition
+  if (samuraiHealthBar.width = 0) {
+    textSize(windowWidth*0.3);
     textAlign(CENTER);
     text("You Lose", windowHeight*0.5, windowWidth*0.5);
   }
 }
+
