@@ -27,7 +27,7 @@ let darkSamuraiAIToggle = false;
 
 //preload assets 
 function preload() {
-  soundFormats("mp3");
+  //soundFormats("mp3");
   backgroundImage = loadImage("assets/sunsetfield.jpg");
   //backgroundMusic = loadSound("assets/samuraimusic.mp3");
   samuraiImage = loadImage("assets/samurai.png");
@@ -51,12 +51,12 @@ function setup() {
 function draw() {
   //backgroundMusic.play();
   //startScreen();
-  keyPressed();
+  //keyPressed();
   //if (playButton.mousePressed()) {
-    playGame();
+    //playGame();
   //}
   //if (instructionsButton.mousePressed()) {
-    //instructionsScreen();
+    instructionsScreen();
   //}
  }
 
@@ -93,7 +93,7 @@ class Button {
 
   //if mouse pressed in button
   mousePressed() {
-    if (isPointInsideButton() === true) {
+    if (this.isPointInsideButton() === true) {
       this.hasBeenPressed = true;  
     }    
   } 
@@ -166,7 +166,7 @@ function keyPressed() {
       //check to see if able to damage enemy
       if (darkSamuraiAttackMode === true || darkSamuraiParryMode === true) {
         darkSamuraiHealthBar.damageTaken();
-        attackSound.play();
+        //attackSound.play();
         //darkSamuraiAI function called 
         darkSamuraiAIToggle = true;
       }
@@ -179,7 +179,7 @@ function keyPressed() {
     samuraiDefendMode = true;
     samuraiAttackMode = false;
     samuraiParryMode = false;
-    defendSound.play();
+    //defendSound.play();
     darkSamuraiAIToggle = true;
   }
   if (key === "p") { 
@@ -193,7 +193,7 @@ function keyPressed() {
     if (key === "p") {
       if (darkSamuraiAttackMode === true || darkSamuraiParryMode === true) {
         darkSamuraiHealthBar.damageTakenFromParry();
-        parrySound.play();
+        //parrySound.play();
         darkSamuraiAIToggle = true;
       }
       else {
@@ -215,7 +215,7 @@ function darkSamuraiAI() {
     darkSamuraiParryMode = false;
     if (samuraiAttackMode === true ||  samuraiParryMode === true) {
       samuraiHealthBar.damageTaken();
-      attackSound.play();
+      //attackSound.play();
       darkSamuraiAIToggle = false;
     }
     else {
@@ -226,7 +226,7 @@ function darkSamuraiAI() {
     darkSamuraiDefendMode = true;
     darkSamuraiAttackMode = false;
     darkSamuraiParryMode = false;
-    defendSound.play();
+    //defendSound.play();
     darkSamuraiAIToggle = false;
   }
   if (chance === 3) {
@@ -239,7 +239,7 @@ function darkSamuraiAI() {
       if (chance === 3) {
         if (samuraiAttackMode === true || samuraiParryMode === true)  {
             samurai.damageTakenFromParry();
-            parrySound.play();
+            //parrySound.play();
         }
       }
     }
